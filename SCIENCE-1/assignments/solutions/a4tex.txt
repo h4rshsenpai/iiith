@@ -1,0 +1,98 @@
+documentclass{article}
+usepackage{amsmath}
+usepackage{geometry}
+
+geometry{a4paper, margin=1in}
+title{Mechanics Assignment 4}
+author{Harshdeep Singh (2019115001)}
+date{Due October 20}
+
+begin{document}
+maketitle
+
+section{Question 1 Coupled Oscillators}
+    This question analyzes a system of two masses and two springs.
+
+    subsection{1. Kinetic Energy, Potential Energy, and Lagrangian}
+        begin{itemize}
+            item textbf{Kinetic Energy (T)} The sum of the kinetic energies of the two masses.
+                $$ T = frac{1}{2} m_1 dot{x}_1^2 + frac{1}{2} m_2 dot{x}_2^2 $$
+            item textbf{Potential Energy (V)} The sum of the potential energies stored in the two springs. The extension of the second spring is $(x_2 - x_1)$.
+                $$ V = frac{1}{2} k_1 x_1^2 + frac{1}{2} k_2 (x_2 - x_1)^2 $$
+            item textbf{Lagrangian (L)} The Lagrangian is $L = T - V$.
+                $$ L = frac{1}{2} m_1 dot{x}_1^2 + frac{1}{2} m_2 dot{x}_2^2 - frac{1}{2} k_1 x_1^2 - frac{1}{2} k_2 (x_2 - x_1)^2 $$
+        end{itemize}
+
+    subsection{2. Lagrange Equations}
+        The Lagrange equation for a coordinate $q_i$ is $frac{d}{dt}left(frac{partial L}{partial dot{q}_i}right) - frac{partial L}{partial q_i} = 0$.
+        begin{itemize}
+            item textbf{For $x_1$}
+                $$ frac{d}{dt}(m_1 dot{x}_1) - (-k_1 x_1 - k_2(x_2-x_1)(-1)) = 0 $$
+                $$ m_1 ddot{x}_1 + (k_1+k_2)x_1 - k_2 x_2 = 0 $$
+            item textbf{For $x_2$}
+                $$ frac{d}{dt}(m_2 dot{x}_2) - (-k_2(x_2-x_1)) = 0 $$
+                $$ m_2 ddot{x}_2 + k_2 x_2 - k_2 x_1 = 0 $$
+        end{itemize}
+
+    subsection{3. Normal Mode Frequencies}
+        We seek oscillatory solutions of the form $x_j(t) = A_j e^{iomega t}$. Substituting these into the equations of motion yields a matrix equation. For a non-trivial solution, the determinant of the coefficient matrix must be zero.
+        $$
+        begin{vmatrix}
+        (k_1+k_2 - m_1omega^2) & -k_2 
+        -k_2 & (k_2 - m_2omega^2)
+        end{vmatrix}
+        = 0
+        $$
+        Expanding the determinant gives a quadratic equation for $omega^2$
+        $$ m_1 m_2 omega^4 - (m_1 k_2 + m_2(k_1+k_2))omega^2 + k_1 k_2 = 0 $$
+        Solving this equation provides the two normal mode frequencies.
+
+hrulefill
+
+section{Question 2 Simple Pendulum}
+    This question deals with a simple pendulum of mass m and length l.
+
+    subsection{1. Lagrangian and Generalized Momentum}
+        begin{itemize}
+            item textbf{Lagrangian (L)}
+                $$ L = T - V = frac{1}{2}ml^2dot{theta}^2 + mglcostheta $$
+            item textbf{Generalized Momentum ($p_{theta}$)}
+                $$ p_theta = frac{partial L}{partial dot{theta}} = ml^2dot{theta} $$
+        end{itemize}
+
+    subsection{2. Hamiltonian $H(p_theta, theta)$}
+        The Hamiltonian is defined by the Legendre transformation $H = p_theta dot{theta} - L$. First, we express $dot{theta}$ in terms of $p_theta$ $dot{theta} = p_theta  (ml^2)$.
+        $$ H = p_theta left(frac{p_theta}{ml^2}right) - left[frac{1}{2}ml^2left(frac{p_theta}{ml^2}right)^2 + mglcosthetaright] $$
+        $$ H(p_theta, theta) = frac{p_theta^2}{2ml^2} - mglcostheta $$
+
+    subsection{3. Phase Space Trajectories for small $theta$}
+        For small angles, we use the approximation $costheta approx 1 - frac{theta^2}{2}$. The Hamiltonian becomes
+        $$ H approx frac{p_theta^2}{2ml^2} + frac{1}{2}mgltheta^2 - mgl $$
+        The conserved energy is $E = H + mgl$. Rearranging the equation for E gives the equation of an ellipse in the phase space ($p_theta$ vs. $theta$)
+        $$ frac{p_theta^2}{2ml^2E} + frac{theta^2}{2Emgl} = 1 $$
+        The trajectories are concentric ellipses centered at the origin.
+
+hrulefill
+
+section{Question 3 Inverse Square Potential}
+    The motion is on a plane with potential $V(r) = -ar$ and constant angular momentum A.
+
+    subsection{1. Generalized Momenta and Bound Orbit Condition}
+        The Lagrangian in polar coordinates is $L = frac{1}{2}m(dot{r}^2 + r^2dot{theta}^2) + ar$.
+        begin{itemize}
+            item textbf{Generalized Momenta} $p_r = mdot{r}$ and $p_theta = mr^2dot{theta}$. The momentum $p_theta$ is the conserved angular momentum, A.
+            item textbf{Bound Orbit Condition} For a bound orbit, the total energy E must be less than the potential energy at infinity. Since $V(r to infty) = 0$, the condition is $mathbf{E  0}$.
+        end{itemize}
+
+    subsection{2. Energy and Radius for a Circular Orbit}
+        A circular orbit occurs at a constant radius, which corresponds to the minimum of the effective potential $V_{text{eff}}(r) = frac{A^2}{2mr^2} - frac{a}{r}$. We find this by setting $frac{dV_{text{eff}}}{dr} = 0$.
+        $$ frac{d}{dr}left(frac{A^2}{2mr^2} - frac{a}{r}right) = -frac{A^2}{mr^3} + frac{a}{r^2} = 0 $$
+        The radius of the circular orbit is $r_c = frac{A^2}{ma}$. The energy of this orbit is $E_c = V_{text{eff}}(r_c) = -frac{ma^2}{2A^2}$.
+
+    subsection{3. Minimum and Maximum Radius}
+        The minimum ($r_{min}$) and maximum ($r_{max}$) radii for a given energy E are the turning points where the radial velocity is zero. This occurs when $E = V_{text{eff}}(r)$.
+        $$ E = frac{A^2}{2mr^2} - frac{a}{r} $$
+        This is a quadratic equation for $1r$. The two solutions give the inverse of the minimum and maximum radii.
+        $$ frac{1}{r} = frac{ma}{A^2} left(1 pm sqrt{1 + frac{2EA^2}{ma^2}}right) $$
+
+end{document}

@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+\title{Science-I: Assignment 2}
+\author{Harshdeep Singh (2019115001)}
+\date{Due: 23 Aug 2023}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1: The Compression Factor}
+
+    \subsection*{(a) Show that $pV_m = RTZ$}
+        The compression factor, Z, is defined as the ratio of the molar volume of a real gas, $V_m$, to the molar volume of a perfect gas, $V_m^{\circ}$, at the same T and p.
+        $$ Z = \frac{V_m}{V_m^{\circ}} $$
+        For a perfect gas, $pV_m^{\circ} = RT$, which means $V_m^{\circ} = \frac{RT}{p}$. Substituting this gives:
+        $$ Z = \frac{V_m}{RT/p} = \frac{pV_m}{RT} $$
+        Rearranging, we get the desired expression.
+        $$ pV_m = RTZ $$
+
+    \subsection*{(b) Behavior of Z with Pressure}
+        The behavior of Z depends on the interplay between intermolecular forces.
+        \begin{itemize}
+            \item \textbf{At very low pressures ($p \to 0$):} Molecules are far apart, forces are negligible, the gas behaves ideally, and $Z \approx 1$.
+            \item \textbf{At intermediate pressures:} Attractive forces dominate, pulling molecules together. This reduces the volume compared to an ideal gas, so $V_m < V_m^{\circ}$, leading to $Z < 1$.
+            \item \textbf{At high pressures:} Molecules are close together, and repulsive forces dominate. This makes the gas harder to compress than an ideal gas, so $V_m > V_m^{\circ}$, leading to $Z > 1$.
+        \end{itemize}
+
+    \subsection*{(c) $\frac{dZ}{dp}$ at low pressures}
+        The virial equation of state is $pV_m = RT(1 + B'p + C'p^2 + \dots)$.
+        Since $Z = pV_m/RT$, we have:
+        $$ Z = 1 + B'p + C'p^2 + \dots $$
+        Differentiating with respect to p:
+        $$ \frac{dZ}{dp} = B' + 2C'p + \dots $$
+        In the limit as $p \to 0$:
+        $$ \lim_{p \to 0} \frac{dZ}{dp} = B' $$
+        The slope of the Z vs. p curve at p=0 is the second virial coefficient, $B'$.
+
+    \subsection*{(d) Boyle Temperature and Helium}
+        The Boyle Temperature ($T_B$) is the temperature at which $Z \to 1$ for low pressures. For Helium, $T_B = 22.64$ K.
+        \begin{itemize}
+            \item At $T = 22.64$ K ($T=T_B$): Helium behaves ideally over a low-pressure range.
+            \item At $T = 20$ K ($T < T_B$): Attractive forces are more significant. The second virial coefficient $B'$ is negative, so Z will initially dip below 1.
+            \item At $T = 25$ K ($T > T_B$): Repulsive forces are more significant. The second virial coefficient $B'$ is positive, so Z will initially be greater than 1.
+        \end{itemize}
+
+    \subsection*{(e) Boyle Temperature of Methane}
+        The Boyle temperature is the temperature at which the second virial coefficient, B(T), is zero.
+        The question provides the empirical equation $B(T) = a + be^{-c/T^2}$ with $a=-0.1993$, $b=0.2002$, and $c=1131$.
+        Set $B(T_B) = 0$:
+        $$ -0.1993 + 0.2002 e^{-1131/T_B^2} = 0 $$
+        $$ e^{-1131/T_B^2} = \frac{0.1993}{0.2002} \approx 0.9955 $$
+        $$ -\frac{1131}{T_B^2} = \ln(0.9955) \approx -0.004505 $$
+        $$ T_B^2 = \frac{-1131}{-0.004505} \approx 251054 $$
+        $$ T_B \approx 501.05 \text{ K} $$
+        The Boyle temperature of methane is approximately \textbf{501 K}.
+
+    \subsection*{(f) van der Waals Equation and Z}
+        The van der Waals (vdW) equation is $(p + \frac{a}{V_m^2})(V_m - b) = RT$. We want to show how this leads to $Z<1$ and $Z>1$.
+        Rearranging the vdW equation:
+        $$ pV_m = \frac{RT V_m}{V_m - b} - \frac{a}{V_m} $$
+        $$ Z = \frac{pV_m}{RT} = \frac{V_m}{V_m - b} - \frac{a}{RTV_m} = \left(1 - \frac{b}{V_m}\right)^{-1} - \frac{a}{RTV_m} $$
+        At low pressures, $V_m$ is large, so we can use the approximation $(1 - x)^{-1} \approx 1+x$:
+        $$ Z \approx \left(1 + \frac{b}{V_m}\right) - \frac{a}{RTV_m} = 1 + \frac{1}{V_m}\left(b - \frac{a}{RT}\right) $$
+        \begin{itemize}
+            \item \textbf{$Z < 1$:} This occurs when $b - \frac{a}{RT} < 0$, or $T < \frac{a}{bR}$. This happens at lower temperatures where attractive forces (the '$a$' term) dominate.
+            \item \textbf{$Z > 1$:} This occurs when $b - \frac{a}{RT} > 0$, or $T > \frac{a}{bR}$. This happens at higher temperatures where repulsive forces due to molecular size (the '$b$' term) dominate.
+        \end{itemize}
+
+\hrulefill
+
+\section*{Question 2: Critical Constants for a vdW Gas}
+    To find the critical constants, we use the condition that at the critical point, the isotherm has an inflection point, meaning the first and second derivatives of pressure with respect to volume are zero.
+    $$ p = \frac{RT}{V_m - b} - \frac{a}{V_m^2} $$
+    $$ \left(\frac{\partial p}{\partial V_m}\right)_T = -\frac{RT_c}{(V_{m,c} - b)^2} + \frac{2a}{V_{m,c}^3} = 0 \quad \text{(1)} $$
+    $$ \left(\frac{\partial^2 p}{\partial V_m^2}\right)_T = \frac{2RT_c}{(V_{m,c} - b)^3} - \frac{6a}{V_{m,c}^4} = 0 \quad \text{(2)} $$
+    From (1), we get $RT_c = \frac{2a(V_{m,c}-b)^2}{V_{m,c}^3}$. From (2), we get $RT_c = \frac{3a(V_{m,c}-b)^3}{V_{m,c}^4}$.
+    Equating these expressions gives $\frac{2}{V_{m,c}} = \frac{3}{V_{m,c}-b}$, which solves to $\mathbf{V_{m,c} = 3b}$.
+    Substituting $V_{m,c}$ back into the expression for $RT_c$ from (1) gives $\mathbf{T_c = \frac{8a}{27bR}}$.
+    Finally, substituting $V_{m,c}$ and $T_c$ into the vdW equation gives $\mathbf{p_c = \frac{a}{27b^2}}$.
+
+\hrulefill
+
+\section*{Question 3: Reduced Variables Equation}
+    We start with the vdW equation and substitute the reduced variables $p = p_r p_c$, $V_m = V_r V_{m,c}$, and $T = T_r T_c$.
+    $$ (p_r p_c + \frac{a}{(V_r V_{m,c})^2})(V_r V_{m,c} - b) = R T_r T_c $$
+    Now, substitute the expressions for the critical constants derived above: $p_c = \frac{a}{27b^2}$, $V_{m,c} = 3b$, $T_c = \frac{8a}{27bR}$.
+    $$ \left(p_r \frac{a}{27b^2} + \frac{a}{(V_r 3b)^2}\right)(V_r 3b - b) = R T_r \frac{8a}{27bR} $$
+    Factor out common terms:
+    $$ \frac{a}{27b^2}\left(p_r + \frac{3}{V_r^2}\right) \cdot b(3V_r - 1) = \frac{8aT_r}{27b} $$
+    Simplifying by canceling $\frac{ab}{27b^2} = \frac{a}{27b}$ from both sides gives the law of corresponding states:
+    $$ \left(p_r + \frac{3}{V_r^2}\right)(3V_r - 1) = 8T_r $$
+
+\end{document}

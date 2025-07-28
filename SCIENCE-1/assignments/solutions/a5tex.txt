@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+\title{SCIENCE I: Assignment 5 - Quantum Mechanics}
+\author{Harshdeep Singh (2019115001)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Problem I: Pauli Matrices}
+    The operators are the Pauli matrices:
+    $\sigma_{1}=\begin{pmatrix}0&1\\ 1&0\end{pmatrix}$, 
+    $\sigma_{2}=\begin{pmatrix}0&-i\\ i&0\end{pmatrix}$, 
+    $\sigma_{3}=\begin{pmatrix}1&0\\ 0&-1\end{pmatrix}$.
+
+    \subsection*{(a) Commutation Relations}
+        We evaluate $[\sigma_i, \sigma_j] = \sigma_i \sigma_j - \sigma_j \sigma_i$.
+        \begin{itemize}
+            \item $[\sigma_1, \sigma_2] = 2i\sigma_3$
+            \item $[\sigma_2, \sigma_3] = 2i\sigma_1$
+            \item $[\sigma_3, \sigma_1] = 2i\sigma_2$
+        \end{itemize}
+        The general relation is $[\sigma_i, \sigma_j] = 2i \sum_k \epsilon_{ijk} \sigma_k$, where $\epsilon_{ijk}$ is the Levi-Civita symbol.
+
+    \subsection*{(b) Eigenvalues and Eigenvectors}
+        All three Pauli matrices have eigenvalues $\mathbf{\lambda = \pm 1}$.
+        \begin{itemize}
+            \item $\mathbf{\sigma_1}$: Eigenvectors are $v_{+1} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ and $v_{-1} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$.
+            \item $\mathbf{\sigma_2}$: Eigenvectors are $v_{+1} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ i \end{pmatrix}$ and $v_{-1} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -i \end{pmatrix}$.
+            \item $\mathbf{\sigma_3}$: Eigenvectors are $v_{+1} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$ and $v_{-1} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$.
+        \end{itemize}
+
+    \subsection*{(c) Probability Distribution}
+        We choose an eigenstate of $\sigma_2$, for example, $|\psi\rangle = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ i \end{pmatrix}$, which corresponds to the eigenvalue +1. We then calculate the probability of measuring the eigenvalues of $\sigma_1$ and $\sigma_3$ in this state.
+        To do this, we express $|\psi\rangle$ in the eigenbases of $\sigma_1$ and $\sigma_3$. The probabilities are the squared magnitudes of the coefficients in that basis.
+        \begin{itemize}
+            \item \textbf{For $\sigma_1$}: $P(\lambda=+1) = 1/2$ and $P(\lambda=-1) = 1/2$.
+            \item \textbf{For $\sigma_3$}: $P(\lambda=+1) = 1/2$ and $P(\lambda=-1) = 1/2$.
+        \end{itemize}
+
+    \subsection*{(d) Variances and Uncertainty Relation}
+        In the state $|\psi\rangle$ from part (c), we evaluate the variances and the uncertainty relation.
+        \begin{itemize}
+            \item Expectation values: $\langle \sigma_1 \rangle = 0$, $\langle \sigma_3 \rangle = 0$.
+            \item Variances: $(\Delta \sigma_1)^2 = \langle \sigma_1^2 \rangle - \langle \sigma_1 \rangle^2 = 1 - 0 = 1$. Similarly, $(\Delta \sigma_3)^2 = 1$.
+            \item Uncertainty Relation Product: $(\Delta \sigma_1)^2 (\Delta \sigma_3)^2 = (1)(1) = 1$.
+            \item Commutator Term: $\frac{1}{4}|\langle[\sigma_1, \sigma_3]\rangle|^2 = \frac{1}{4}|\langle-2i\sigma_2\rangle|^2 = \frac{1}{4}|-2i\langle\sigma_2\rangle|^2 = \frac{1}{4}|-2i(1)|^2 = 1$.
+        \end{itemize}
+        The uncertainty principle is satisfied, as $1 \ge 1$.
+
+\hrulefill
+
+\section*{Problem II: Infinite 1D Potential Well}
+    An electron is in the state $|\psi\rangle=\frac{1}{\sqrt{2}}|\phi_{1}\rangle+\frac{1}{\sqrt{2}}|\phi_{2}\rangle$ at $t=0$, where $|\phi_1\rangle$ and $|\phi_2\rangle$ are the two lowest energy eigenstates in an infinite well of length L.
+
+    \subsection*{(a) Average Energy and Variance}
+        The energy eigenvalues are $E_n = \frac{n^2\pi^2\hbar^2}{2mL^2}$.
+        \begin{itemize}
+            \item \textbf{Average Energy $\langle E \rangle$}: $\langle E \rangle = \frac{1}{2}E_1 + \frac{1}{2}E_2 = \frac{5\pi^2\hbar^2}{4mL^2}$.
+            \item \textbf{Variance $(\Delta E)^2$}: $(\Delta E)^2 = \langle E^2 \rangle - \langle E \rangle^2 = \frac{1}{4}(E_2-E_1)^2 = \frac{9\pi^4\hbar^4}{16m^2L^4}$.
+        \end{itemize}
+        Since the state is a superposition of energy eigenstates, the average energy and its variance are constant in time.
+
+    \subsection*{(b) Probability Density at x=L/2}
+        At $t=0$, the wavefunction is $\Psi(x,0) = \frac{1}{\sqrt{L}}(\sin(\frac{\pi x}{L}) + \sin(\frac{2\pi x}{L}))$.
+        At $x=L/2$, $\sin(\pi x/L) = \sin(\pi/2) = 1$ and $\sin(2\pi x/L) = \sin(\pi) = 0$.
+        So, $\Psi(L/2,0) = \frac{1}{\sqrt{L}}(1 + 0) = \frac{1}{\sqrt{L}}$.
+        The probability density is $|\Psi(L/2,0)|^2 = \mathbf{\frac{1}{L}}$.
+
+    \subsection*{(c) Average Position and Variance}
+        The time-dependent wave function is $\Psi(x,t) = \frac{1}{\sqrt{2}}(\phi_1 e^{-iE_1t/\hbar} + \phi_2 e^{-iE_2t/\hbar})$.
+        \begin{itemize}
+            \item \textbf{Average Position $\langle X \rangle$}: The expectation value of position, $\langle X \rangle_t = \int \Psi^* x \Psi dx$, is time-dependent due to the interference between the $\phi_1$ and $\phi_2$ states. It oscillates around the center of the well, $L/2$.
+            $$ \langle X \rangle_t = \frac{L}{2} - \frac{16L}{9\pi^2}\cos\left(\frac{(E_2-E_1)t}{\hbar}\right) $$
+            \item \textbf{Variance $(\Delta X)^2$}: This is also time-dependent.
+        \end{itemize}
+
+    \subsection*{(d) Average Momentum}
+        The average momentum $\langle p \rangle = \int \Psi^* (-i\hbar \frac{\partial}{\partial x}) \Psi dx$. For any single energy eigenstate, the average momentum is zero. However, for this superposition state, it is time-dependent and non-zero.
+        $$ \langle p \rangle_t = \frac{8\hbar}{3L}\sin\left(\frac{(E_2-E_1)t}{\hbar}\right) $$
+
+\end{document}

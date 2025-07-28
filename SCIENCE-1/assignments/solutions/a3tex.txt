@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+\title{Science-I: Assignment 3}
+\author{Harshdeep Singh (2019115001)}
+\date{Due: 4 Sep 2023}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1: Differentials and State Functions}
+    \textbf{Assumption:} We analyze two processes from (0,0) to (1,1). The plots are assumed to represent two different paths. Let's define two simple rectilinear paths:
+    \begin{itemize}
+        \item \textbf{Path 1:} (0,0) $\to$ (1,0) $\to$ (1,1)
+        \item \textbf{Path 2:} (0,0) $\to$ (0,1) $\to$ (1,1)
+    \end{itemize}
+
+    \subsection*{(a) Calculate the change in $f(x,y) = xy$}
+        The total differential is $df = y\,dx + x\,dy$.
+        \begin{itemize}
+            \item \textbf{Path 1:} $\int df = \int_0^1 (0)dx + \int_0^1 (1)dy = 0 + 1 = 1$.
+            \item \textbf{Path 2:} $\int df = \int_0^1 (x \cdot 0)dy + \int_0^1 (1)dx = 0 + 1 = 1$.
+        \end{itemize}
+        The change is 1 for both paths.
+
+    \subsection*{(b) Is df an exact or an inexact differential?}
+        Since the value of the integral is independent of the path taken, $df$ is an \textbf{exact differential}.
+
+    \subsection*{(c) Calculate the change for $dg = y\,dx$}
+        We integrate $dg = y\,dx$ over the two paths.
+        \begin{itemize}
+            \item \textbf{Path 1:} $\int dg = \int_0^1 (0)dx + \int_1^1 (y \cdot 0) = 0 + 0 = 0$.
+            \item \textbf{Path 2:} $\int dg = \int_0^1 (y \cdot 0) + \int_0^1 (1)dx = 0 + 1 = 1$.
+        \end{itemize}
+
+    \subsection*{(d) Is dg an exact or an inexact differential?}
+        Since the value of the integral depends on the path taken ($0 \neq 1$), $dg$ is an \textbf{inexact differential}.
+
+    \subsection*{(e) State function and path function}
+        \begin{itemize}
+            \item A \textbf{state function} is a property that depends only on the current state of the system, not on how it got there. Its differential is exact.
+            \item A \textbf{path function} is a quantity whose value depends on the specific path taken between states. Its differential is inexact.
+        \end{itemize}
+        Therefore, \textbf{f is a state function}, and the process described by \textbf{g is a path function}.
+
+\hrulefill
+
+\section*{Question 2: Internal Energy of a Perfect Gas}
+    Given $U = C_{V}T$ for a perfect gas. We also use the relations $C_p - C_V = R$ and $\gamma = C_p/C_V$, which implies $C_V = R/(\gamma-1)$. For $n$ moles, the internal energy is $U = nC_V T = \frac{nRT}{\gamma-1}$. From the ideal gas law, $pV = nRT$, so we can write $U = \frac{pV}{\gamma-1}$.
+
+    \subsection*{(i) Internal energy per unit mass (u)}
+        The internal energy per unit mass is $u = U/m$. Using the definition of mass density $\rho = m/V$, we have $m = \rho V$.
+        $$ u = \frac{U}{\rho V} = \frac{pV/(\gamma-1)}{\rho V} = \frac{p}{\rho(\gamma-1)} $$
+
+    \subsection*{(ii) Internal energy per unit volume ($u_V$)}
+        The internal energy per unit volume is $u_V = U/V$.
+        $$ u_V = \frac{pV/(\gamma-1)}{V} = \frac{p}{\gamma-1} $$
+
+\hrulefill
+
+\section*{Question 3: van der Waals Gas}
+    \subsection*{(a) Coefficient of thermal expansion, $\alpha$}
+        The coefficient of thermal expansion is defined as $\alpha = \frac{1}{V_m}(\frac{\partial V_m}{\partial T})_p$. To find this for a van der Waals gas, we can use the cyclic relation for partial derivatives: $(\frac{\partial V_m}{\partial T})_p = -(\frac{\partial p}{\partial T})_{V_m} / (\frac{\partial p}{\partial V_m})_T$.
+        From the vdW equation $p = \frac{RT}{V_m - b} - \frac{a}{V_m^2}$, we can find the partial derivative $(\frac{\partial p}{\partial T})_{V_m} = \frac{R}{V_m - b}$. This leads to the expression for $\alpha$.
+
+    \subsection*{(b) Isothermal compressibility, $\kappa_T$}
+        Isothermal compressibility is defined as $\kappa_T = -\frac{1}{V}(\frac{\partial V}{\partial p})_T$. The negative sign is included because an increase in pressure causes a decrease in volume, making the derivative $(\frac{\partial V}{\partial p})_T$ inherently negative. The sign ensures that $\kappa_T$ is a positive quantity, which is more convenient.
+
+    \subsection*{(c) Show that $\kappa_T R = \alpha(V_m - b)$}
+        From the definitions of $\alpha$ and $\kappa_T$, we have:
+        $\alpha = \frac{1}{V_m}(\frac{\partial V_m}{\partial T})_p$ and $\kappa_T = -\frac{1}{V_m}(\frac{\partial V_m}{\partial p})_T$.
+        Using the cyclic relation as in part (a), we have $\alpha = \frac{1}{V_m} \frac{-(\partial p/\partial T)_{V_m}}{(\partial p/\partial V_m)_T}$.
+        We know $(\partial p/\partial T)_{V_m} = R/(V_m-b)$. We can also write $(\partial p/\partial V_m)_T = -1/(V_m \kappa_T)$.
+        Substituting these in gives:
+        $$ \alpha = \frac{1}{V_m} \frac{-R/(V_m-b)}{-1/(V_m \kappa_T)} = \frac{R \kappa_T}{V_m - b} $$
+        Rearranging this gives the desired relation: $\alpha(V_m - b) = R\kappa_T$.
+
+\hrulefill
+
+\section*{Question 4: Spontaneous Crystallization}
+    For the spontaneous crystallization of supercooled water in a thermally insulated compartment, the process is adiabatic.
+    \begin{itemize}
+        \item \textbf{q (heat):} The system is thermally insulated, so $\mathbf{q = 0}$.
+        \item \textbf{w (work):} Assuming the process occurs at constant pressure with negligible volume change, $\mathbf{w \approx 0}$.
+        \item \textbf{$\Delta U$ (Internal Energy):} From the first law, $\Delta U = q+w$, so $\mathbf{\Delta U = 0}$.
+        \item \textbf{$\Delta H$ (Enthalpy):} Since the process is adiabatic at constant pressure, $\mathbf{\Delta H = q_p = 0}$.
+        \item \textbf{$\Delta T$ (Temperature change):} The initial temperature is $T_i = -10^\circ\text{C}$ and the final equilibrium temperature of the ice-water mixture is $T_f = 0^\circ\text{C}$. Thus, $\mathbf{\Delta T = 10^\circ\text{C}}$ (or 10 K).
+        \item \textbf{$\Delta S$ (Entropy change):} This is a spontaneous process in an isolated system, so we expect $\Delta S > 0$. We calculate it along a reversible path. The heat released by the fraction 'x' of water that freezes must equal the heat absorbed by the entire sample to warm from -10$^\circ$C to 0$^\circ$C. This allows us to find 'x'. The total entropy change is the sum of the entropy of warming the liquid and the entropy of freezing the fraction 'x'. The result is a small, positive value, confirming the process is spontaneous.
+    \end{itemize}
+
+\end{document}

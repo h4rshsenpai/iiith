@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+\title{Science-I: Assignment 1}
+\author{Harshdeep Singh (2019115001)}
+\date{Due: 14 Aug 2023}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1: Estimation}
+    This question involves estimating various physical quantities.
+
+    \subsection*{(a) Distance from classroom (H-205) to main gate}
+        \textbf{Assumptions:}
+        \begin{itemize}
+            \item A typical university campus might have a walking distance of about 500 to 1000 meters from a central academic building to the main gate.
+            \item Let's estimate the distance to be 800 meters.
+        \end{itemize}
+        \textbf{Calculation:}
+        The question asks for the distance in the form of $n \times 100$ m.
+        $$ 800 \text{ m} = n \times 100 \text{ m} $$
+        This gives $n=8$.
+
+        \textbf{Answer:} The estimated integer value for n is \textbf{8}.
+
+    \subsection*{(b) Time to walk from classroom to main gate}
+        \textbf{Assumptions:}
+        \begin{itemize}
+            \item The average human walking pace is about 5 km/h, which is approximately $1.4$ m/s.
+            \item The distance is 800 m, as estimated in the previous part.
+        \end{itemize}
+        \textbf{Calculation:}
+        $$ \text{Time} = \frac{\text{Distance}}{\text{Speed}} = \frac{800 \text{ m}}{1.4 \text{ m/s}} \approx 571 \text{ seconds} $$
+        The question asks for the time in integer minutes.
+        $$ \frac{571 \text{ s}}{60 \text{ s/min}} \approx 9.52 \text{ minutes} $$
+        Rounding to the nearest integer, we get $n=10$.
+
+        \textbf{Answer:} The estimated integer value for n is \textbf{10} minutes.
+
+    \subsection*{(c) Time for an electron to travel the distance}
+        \textbf{Assumptions:}
+        \begin{itemize}
+            \item The cable is made of Copper (Cu).
+            \item The current (I) is a typical value for home wiring, let's say 5 A.
+            \item The cable is a standard 12-gauge wire with a diameter of 2.05 mm.
+            \item Each copper atom contributes one free electron.
+        \end{itemize}
+        \textbf{Calculations:}
+        The drift velocity ($v_d$) of an electron is given by $I = n_e A q v_d$.
+        \begin{enumerate}
+            \item \textbf{Number density of electrons ($n_e$):}
+            Density of Cu ($\rho$) = $8960 \text{ kg/m}^3$. Molar mass of Cu (M) = $0.0635 \text{ kg/mol}$. Avogadro's number ($N_A$) = $6.022 \times 10^{23} \text{ mol}^{-1}$.
+            $$ n_e = \frac{\rho N_A}{M} = \frac{(8960)(6.022 \times 10^{23})}{0.0635} \approx 8.5 \times 10^{28} \text{ electrons/m}^3 $$
+            \item \textbf{Cross-sectional area (A):}
+            Radius (r) = $d/2 = 1.025 \times 10^{-3}$ m.
+            $$ A = \pi r^2 = \pi (1.025 \times 10^{-3})^2 \approx 3.3 \times 10^{-6} \text{ m}^2 $$
+            \item \textbf{Drift velocity ($v_d$):}
+            Charge of an electron (q) = $1.602 \times 10^{-19}$ C.
+            $$ v_d = \frac{I}{n_e A q} = \frac{5}{(8.5 \times 10^{28})(3.3 \times 10^{-6})(1.602 \times 10^{-19})} \approx 1.1 \times 10^{-4} \text{ m/s} $$
+            \item \textbf{Time taken (t):}
+            Distance (L) = 800 m.
+            $$ t = \frac{L}{v_d} = \frac{800}{1.1 \times 10^{-4}} \approx 7.27 \times 10^6 \text{ seconds} $$
+        \end{enumerate}
+        \textbf{Answer:} The time taken is approximately \textbf{7.27 million seconds} (or about 84 days).
+
+    \subsection*{(d) Rounds made by a ground state hydrogen electron}
+        \textbf{Calculations:}
+        \begin{enumerate}
+            \item \textbf{Time period of one revolution (T):}
+            For the Bohr model's ground state ($n=1$), the orbital radius is the Bohr radius, $a_0 \approx 5.29 \times 10^{-11}$ m, and the electron's speed is $v \approx 2.19 \times 10^6$ m/s.
+            $$ T = \frac{2\pi a_0}{v} = \frac{2\pi (5.29 \times 10^{-11})}{2.19 \times 10^6} \approx 1.52 \times 10^{-16} \text{ s} $$
+            \item \textbf{Number of rounds (N):}
+            Using the time from part (c), $t \approx 7.27 \times 10^6$ s.
+            $$ N = \frac{t}{T} = \frac{7.27 \times 10^6}{1.52 \times 10^{-16}} \approx 4.78 \times 10^{22} $$
+        \end{enumerate}
+        \textbf{Answer:} The electron would make approximately \textbf{$4.78 \times 10^{22}$} rounds.
+
+    \subsection*{(e) Power consumed}
+        \textbf{Calculations:}
+        \begin{enumerate}
+            \item \textbf{Resistance of the cable (R):}
+            Resistivity of Copper ($\rho_{Cu}$) $\approx 1.68 \times 10^{-8} \, \Omega \cdot \text{m}$.
+            $$ R = \rho_{Cu} \frac{L}{A} = (1.68 \times 10^{-8}) \frac{800}{3.3 \times 10^{-6}} \approx 4.07 \, \Omega $$
+            \item \textbf{Power consumed (P):}
+            Using the current $I=5$ A.
+            $$ P = I^2 R = (5)^2 \times 4.07 = 101.75 \text{ Watts} $$
+        \end{enumerate}
+        \textbf{Answer:} The power consumed is approximately \textbf{102 Watts}.
+
+\hrulefill
+
+\section*{Question 2: Phase Plane Trajectories}
+    This question asks for sketches of phase plane trajectories for two types of mechanical systems.
+
+    \subsection*{(i) Simple Harmonic Motion (SHM)}
+        For SHM, the total energy is $E = \frac{p^2}{2m} + \frac{1}{2}kx^2$. This equation can be rearranged into the form of an ellipse:
+        $$ \frac{p^2}{(\sqrt{2mE})^2} + \frac{x^2}{(\sqrt{2E/k})^2} = 1 $$
+        The phase space trajectories are a family of concentric ellipses centered at the origin. Each ellipse corresponds to a specific total energy E. Higher energy corresponds to a larger ellipse.
+
+    \subsection*{(ii) Anharmonic Potential}
+        For an anharmonic potential (e.g., Morse potential), the trajectories change shape.
+        \begin{itemize}
+            \item \textbf{Low Energy ($E < D_e$):} For energies below the dissociation limit ($D_e$), the motion is bound and periodic. The trajectories are closed, distorted ovals contained within the potential well.
+            \item \textbf{High Energy ($E > D_e$):} When energy exceeds the dissociation limit, the particle is no longer bound. The trajectory is an open curve, indicating the particle comes from infinity, interacts with the potential, and returns to infinity.
+        \end{itemize}
+
+\hrulefill
+
+\section*{Question 3: The Logistic Map}
+    The logistic map is given by $x_{n+1} = \alpha x_n (1 - x_n)$.
+
+    The parameter $\alpha$ is studied in the range $0 \le \alpha \le 4$ because this range keeps the population, $x_n$, within the meaningful interval of $[0, 1]$.
+    \begin{itemize}
+        \item If $\alpha > 4$, the map can produce values of $x_{n+1} > 1$, which can then lead to negative and divergent values, which are unphysical for population models.
+        \item If $\alpha < 1$, the population always dies out, converging to the fixed point $x=0$.
+    \end{itemize}
+    The interesting dynamics, including fixed points, period-doubling, and chaos, occur for $1 < \alpha \le 4$.
+
+    \textbf{Graphical Comparison}:
+    \begin{itemize}
+        \item For $\alpha = 0.8$, the sequence converges to the fixed point $x=0$.
+        \item For $\alpha = 1.5$, the sequence converges to the stable fixed point $x = 1 - 1/\alpha = 1/3$.
+        \item For $\alpha = 3.2$, the system exhibits a stable period-2 orbit. The values of $x_n$ will alternate between two distinct values after a few iterations.
+    \end{itemize}
+
+\hrulefill
+
+\section*{Question 4: Binomial to Gaussian Distribution}
+    We will show that for large N, the binomial distribution becomes a Gaussian distribution.
+
+    \textbf{Assumption on p=1/2:}
+    The full binomial formula is $P(n|N) = \binom{N}{n} p^n (1-p)^{N-n}$. However, the hint provided in the assignment simplifies this to just $P(N|n) = \binom{N}{n}$. This omission of the $p^n(1-p)^{N-n}$ term implies a special case where this term is constant with respect to 'n'. This only occurs when $p = 1-p$, which means $p=1/2$. For this case, the term becomes $(1/2)^N$, a constant that doesn't affect the shape of the distribution. We proceed with this simplification as intended by the hint.
+
+    Let's analyze $f(n) = \ln P(n|N)$, where $P(n|N) \propto \binom{N}{n}$.
+    $$ f(n) = \ln(N!) - \ln(n!) - \ln((N-n)!) $$
+    Using Stirling's approximation, $\ln(k!) \approx k\ln(k) - k$:
+    $$ f(n) \approx (N\ln N - N) - (n\ln n - n) - ((N-n)\ln(N-n) - (N-n)) $$
+    $$ f(n) \approx N\ln N - n\ln n - (N-n)\ln(N-n) $$
+    To find the peak ($n^*$), we set the first derivative to zero:
+    $$ f'(n) = -\ln n - 1 - (-\ln(N-n) - 1) = \ln\left(\frac{N-n}{n}\right) = 0 \implies n^* = N/2 $$
+    The second derivative at the peak is:
+    $$ f''(n) = -\frac{1}{N-n} - \frac{1}{n} \implies f''(n^*) = -\frac{1}{N/2} - \frac{1}{N/2} = -\frac{4}{N} $$
+    Using a Taylor expansion for $f(n)$ around $n^*$ up to the second order:
+    $$ f(n) \approx f(n^*) + (n-n^*)f'(n^*) + \frac{1}{2}(n-n^*)^2 f''(n^*) $$
+    Since $f'(n^*)=0$ at the maximum:
+    $$ f(n) \approx f(n^*) - \frac{1}{2}(n-n^*)^2 \frac{4}{N} = f(n^*) - \frac{2(n-N/2)^2}{N} $$
+    Taking the antilog gives the probability distribution:
+    $$ P(n|N) \approx e^{f(n^*)} e^{-\frac{2(n-N/2)^2}{N}} = C \cdot e^{-\frac{(n-N/2)^2}{N/2}} $$
+    This is a Gaussian distribution with mean $\mu = N/2$ and variance $\sigma^2 = N/4$.
+
+\end{document}
