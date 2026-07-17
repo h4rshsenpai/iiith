@@ -1,0 +1,442 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Graph Homomorphism Bounds}
+\subtitle{Combinatorial and Entropy-Based Approaches (Sections 3 \& 4)}
+\author{}
+\date{}
+
+\newcommand{\Stir}[2]{S(#1,#2)}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ============================================================
+\section{Introduction \& Setup}
+% ============================================================
+
+\begin{frame}{Problem Setting}
+  \begin{block}{Setup}
+    \begin{itemize}
+      \item \textbf{Source graph:} $K_{p,q}$ (complete bipartite)
+      \item \textbf{Target graph:} $G$ bipartite with partite sets $L$, $R$ of sizes $n_1$, $n_2$
+      \item \textbf{Goal:} Bound $\hom(K_{p,q}, G)$ --- the number of graph homomorphisms
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Notation}
+    \begin{itemize}
+      \item $\delta = |E(G)|/(n_1 n_2)$: edge density of $G$
+      \item $d_G(w)$: degree of vertex $w$ in $G$
+      \item $N_{k,\ell}(G)$: number of labeled bipartite cliques $K_{k,\ell}$ in $G$ with sizes $k$, $\ell$
+    \end{itemize}
+  \end{block}
+
+  \begin{alertblock}{Challenge}
+    Direct enumeration is computationally expensive --- we need efficient bounds.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Two Complementary Approaches}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Section 3: Combinatorial Bounds}
+        \begin{itemize}
+          \item Exact formula via Stirling numbers
+          \item Simplified lower bound
+          \item Uses graph structure directly
+          \item Exact on $C_4$-free graphs
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Section 4: Entropy-Based Bounds}
+        \begin{itemize}
+          \item Probabilistic edge sampling
+          \item Shannon entropy machinery
+          \item Simple bound from density $\delta$ only
+          \item Refined bound using degree distribution
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{1em}
+  \textbf{Key insight:} More structural information $\Rightarrow$ tighter bounds, but higher cost.
+\end{frame}
+
+% ============================================================
+\section{Section 3: Combinatorial Bounds}
+% ============================================================
+
+\begin{frame}{Stirling Numbers of the Second Kind}
+  \begin{block}{Definition}
+    $S(n,k) = $ number of ways to partition $[n]$ into $k$ nonempty disjoint subsets.
+  \end{block}
+
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \textbf{Base cases:}
+      \begin{itemize}
+        \item $S(n,n) = 1$
+        \item $S(n,1) = 1$
+        \item $S(n,0) = 0$ for $n > 0$
+      \end{itemize}
+      \textbf{Recurrence:}
+      \[
+        S(n,k) = k \cdot S(n-1,k) + S(n-1,k-1)
+      \]
+      \textbf{Role:} Number of surjections $[n] \to [k]$ equals $k! \cdot S(n,k)$.
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Intuition for placing element $n$:}
+      \begin{itemize}
+        \item Join one of $k$ existing subsets:\\
+          $k \cdot S(n-1,k)$ ways
+        \item Form a new singleton:\\
+          $S(n-1,k-1)$ ways
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Proposition 3.1: Exact Formula}
+  \begin{theorem}[Proposition 3.1]
+    Let $G$ be bipartite with partite sets $L$, $R$. For $p, q \in \mathbb{N}$:
+    \[
+      \hom(K_{p,q}, G) = \sum_{k=1}^{p} \sum_{\ell=1}^{q} k!\, \ell!\, S(p,k)\, S(q,\ell)
+      \bigl[N_{k,\ell}(G) + N_{\ell,k}(G)\bigr]
+    \]
+  \end{theorem}
+
+  \textbf{Proof outline:}
+  \begin{enumerate}
+    \item \textbf{Bipartition preservation:} Every homomorphism maps each partite set of $K_{p,q}$ entirely into one partite set of $G$.
+    \item \textbf{Image is a clique:} The image of $\varphi$ forms a complete bipartite subgraph $K_{k,\ell} \subseteq G$.
+    \item \textbf{Counting surjections:} For each $K_{k,\ell}$ in $G$, there are $k!\,S(p,k) \cdot \ell!\,S(q,\ell)$ surjective mappings.
+    \item \textbf{Sum over both orientations} ($N_{k,\ell}$ and $N_{\ell,k}$), then sum over all $k, \ell$.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Proposition 3.2: Combinatorial Lower Bound}
+  \begin{theorem}[Proposition 3.2]
+    \[
+      \hom(K_{p,q}, G) \geq \sum_{w \in V(G)} \bigl[d_G(w)^p + d_G(w)^q\bigr] - 2|E(G)|
+    \]
+    with equality if and only if $G$ is $C_4$-free.
+  \end{theorem}
+
+  \textbf{Proof strategy:}
+  \begin{enumerate}
+    \item \textbf{Drop higher terms} in Prop.\ 3.1: all $k, \ell \geq 2$ terms are non-negative, so dropping them gives a lower bound.
+    \item \textbf{Star homomorphisms:} The remaining sum equals
+      $\hom(K_{1,p}, G) + \hom(K_{1,q}, G) - 2|E(G)|$.
+    \item \textbf{Classical result:} $\hom(K_{1,m}, G) = \sum_w d_G(w)^m$.
+    \item \textbf{Equality:} Holds $\Leftrightarrow$ all dropped terms vanish $\Leftrightarrow$ $N_{2,2}(G) = 0$ $\Leftrightarrow$ $G$ is $C_4$-free.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Remarks 3.2 \& 3.3: Sparsity Requirement for Exactness}
+  \begin{block}{Remark 3.2 --- Edge Count in $C_4$-Free Graphs}
+    By the K\H{o}v\'ari--S\'os--Tur\'an theorem, any $C_4$-free bipartite graph satisfies
+    \[
+      m = O(n^{3/2})
+    \]
+    So the equality condition in Prop.\ 3.2 forces $G$ to be very sparse.
+  \end{block}
+
+  \begin{block}{Remark 3.3 --- Edge Density Constraint}
+    Translating to density: $\delta = m/(n_1 n_2) = O(n^{-1/2}) \to 0$ as $n \to \infty$.\\[0.3em]
+    \textbf{Consequence:} The combinatorial bound is exact only for graphs that become \emph{increasingly sparse} as they grow.
+  \end{block}
+
+  \begin{alertblock}{Takeaway}
+    Prop.\ 3.2 is well-suited for sparse, $C_4$-free graphs. For dense graphs, we need a different approach.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Remark 3.4: Failure on Dense Graphs}
+  \textbf{Test case:} $G = K_{n/2,\,n/2}$ (both partite sets of size $n/2$, all edges present).
+
+  \begin{columns}
+    \begin{column}{0.52\textwidth}
+      \textbf{Exact count:}
+      \[
+        \hom(K_{p,p},\,G) = 2^{1-p}\,n^{2p}
+      \]
+      Each of $p$ left-vertices maps independently to $n/2$ choices on each side.
+
+      \textbf{Prop.\ 3.2 lower bound:}
+      \[
+        \hom(K_{p,p},\,G) \gtrsim 2^{1-p}\,n^{p+1}
+      \]
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{alertblock}{Ratio}
+        \[
+          \frac{\text{Exact}}{\text{Bound}} \;\sim\; \frac{n^{2p}}{n^{p+1}} = n^{p-1} \;\to\; \infty
+        \]
+        The bound becomes \textbf{arbitrarily weak}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.5em}
+  \textit{``This is in contrast to the lower bounds derived in Section~4, for which the corresponding ratio tends, as desired, to~1.''}
+\end{frame}
+
+\begin{frame}{Corollaries 3.1 \& 3.2}
+  \begin{block}{Corollary 3.1 --- Trees (equality case)}
+    For any tree $T$ on $n$ vertices (always $C_4$-free):
+    \[
+      \hom(K_{p,q},\,T) = \sum_{w \in V(T)} \bigl[d_T(w)^p + d_T(w)^q\bigr] - 2(n-1)
+    \]
+  \end{block}
+
+  \begin{block}{Corollary 3.2 --- Jensen's Inequality Refinement}
+    Since $x \mapsto x^p$ is convex, Jensen's inequality applied to vertex degrees gives:
+    \[
+      \hom(K_{p,q},\,G) \;\geq\; 2^p\,n^{1-p}\,m^p + 2^q\,n^{1-q}\,m^q - 2m
+    \]
+    \textbf{Equality} iff $G$ is $C_4$-free \emph{and} regular (all degrees equal, so Jensen is tight).
+  \end{block}
+\end{frame}
+
+\begin{frame}{Corollaries 3.3 \& 3.4: Cycles and Paths}
+  \begin{block}{Corollary 3.3 --- Cycle $C_n$}
+    \[
+      \hom(K_{p,q},\,C_n) = \begin{cases}
+        n\bigl(2^p + 2^q - 2\bigr) & n = 3 \text{ or } n \geq 5 \\
+        2^{p+q+1} & n = 4
+      \end{cases}
+    \]
+    \textit{Why does this work for non-bipartite odd cycles?}
+    A bipartite source $K_{p,q}$ cannot create odd cycles, so its image lies in a tree-like (path) subgraph of $C_n$, which is $C_4$-free --- the Prop.\ 3.2 formula applies automatically.
+    $C_4$ is handled by direct counting ($N_{k,\ell}(C_4) = 0$ for $k,\ell \geq 2$).
+  \end{block}
+
+  \begin{block}{Corollary 3.4 --- Path $P_\ell$}
+    $P_\ell$ is a tree ($\ell - 2$ vertices of degree~2, two of degree~1), so Corollary~3.1 applies directly:
+    \[
+      \hom(K_{p,q},\,P_\ell) = (\ell-2)(2^p+2^q) + 2 - 2(\ell-1)
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}{Transition: Why Entropy-Based Bounds?}
+  \begin{itemize}
+    \item Prop.\ 3.2 requires knowledge of the full degree sequence --- $O(n)$ input.
+    \item Prop.\ 3.1 requires the full biclique structure --- $O(n^{k+\ell})$ computation.
+    \item \textbf{Both fail on dense graphs:} ratio of exact count to bound $\to \infty$.
+  \end{itemize}
+
+  \vspace{0.5em}
+  \begin{alertblock}{Section 4 Goal}
+    Derive lower bounds using \textbf{only edge density $\delta$} (and optionally the degree distribution) --- no structural enumeration. The resulting ratio approaches \textbf{1} on balanced, dense graphs.
+  \end{alertblock}
+
+  \vspace{0.3em}
+  \textbf{Tool:} Shannon entropy applied to a random edge $(U, V) \sim \mathrm{Uniform}(E(G))$.
+\end{frame}
+
+% ============================================================
+\section{Section 4: Entropy-Based Bounds}
+% ============================================================
+
+\begin{frame}{Entropy Background}
+  \begin{block}{Definition (Shannon Entropy)}
+    For discrete r.v.\ $X$ with support $[n]$:
+    \[
+      H(X) = -\sum_{i=1}^{n} P(X=i) \log P(X=i)
+    \]
+  \end{block}
+
+  \textbf{Key properties used:}
+  \begin{itemize}
+    \item $H(X) \leq \log n$ (uniform distribution maximizes entropy)
+    \item $H(X,Y) = H(X) + H(Y \mid X)$ (chain rule)
+    \item $H(X_1, \ldots, X_n) \leq \sum_i H(X_i)$ (subadditivity)
+  \end{itemize}
+
+  \textbf{Strategy:} Sample edges randomly from $G$, build a joint distribution $(U^p, V^q)$, and use entropy lower bounds to count homomorphisms.
+\end{frame}
+
+\begin{frame}{Lemma 4.1: Probabilistic Construction}
+  \begin{block}{Setup}
+    Let $(U,V)$ be uniform over $E(G)$, $U \in L$, $V \in R$.
+  \end{block}
+
+  \textbf{Construct $(U^p, V^q)$ as follows:}
+  \begin{enumerate}
+    \item $V_1, \ldots, V_q$ are \textbf{i.i.d.\ given} $U$: \quad
+      $P_{V^q \mid U}(v \mid u) = \prod_j P_{V \mid U}(v_j \mid u)$
+    \item $U_1, \ldots, U_p$ are \textbf{i.i.d.\ given} $V^q$ via Bayes-like construction.
+  \end{enumerate}
+
+  \begin{theorem}[Lemma 4.1]
+    \textit{Under this construction:}\\[0.3em]
+    \quad (i) $U_i \sim U$ for all $i \in [p]$\\
+    \quad (ii) $(U_i, V_j) \sim (U,V)$ for all $i, j$
+  \end{theorem}
+
+  \textbf{Importance:} Since $(U_i, V_j)$ has the correct edge distribution, any realization
+  $(u,v) \in U^p \times V^q$ yields a valid homomorphism $\varphi : V(K_{p,q}) \to V(G)$.
+\end{frame}
+
+\begin{frame}{Lemma 4.2: Entropy Lower Bounds}
+  \begin{theorem}[Lemma 4.2]
+    \[
+      H(U_1, V^q) \geq \log(\delta^q n_1 n_2^q)
+    \]
+    \[
+      H(U^p, V^q) \geq \log(\delta^{pq} n_1^p n_2^q)
+    \]
+  \end{theorem}
+
+  \textbf{Proof of first inequality:}
+  \begin{align*}
+    H(U_1, V^q) &= H(U) + q\,H(V \mid U) \quad \text{(chain rule + cond.\ independence)}\\
+                &= H(U) + q\bigl[\log(\delta n_1 n_2) - H(U)\bigr]\\
+                &= q\log(\delta n_1 n_2) - (q-1)\,H(U)\\
+                &\geq q\log(\delta n_1 n_2) - (q-1)\log n_1 \quad \text{(since $H(U) \leq \log n_1$)}\\
+                &= \log(\delta^q n_1 n_2^q)
+  \end{align*}
+
+  \textbf{Second inequality:} parallel argument using $H(V^q) \leq q \log n_2$.
+\end{frame}
+
+\begin{frame}{Proposition 4.1: First Entropy-Based Bound}
+  \begin{theorem}[Proposition 4.1]
+    Let $G$ be bipartite with $|L| = n_1$, $|R| = n_2$, density $\delta$. Then:
+    \[
+      \hom(K_{p,q}, G) \geq \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p)
+    \]
+  \end{theorem}
+
+  \textbf{Proof:}
+  \begin{enumerate}
+    \item Partition $\mathrm{Hom}(K_{p,q}, G) = H_1 \sqcup H_2$ by which partite sets map where.
+    \item Each realization $(u,v)$ of $(U^p, V^q)$ gives a distinct element of $H_1$.
+    \item Uniform distribution: $H(U^p, V^q) \leq \log |H_1|$
+    \item Lemma 4.2: $\log(\delta^{pq} n_1^p n_2^q) \leq H(U^p, V^q) \leq \log |H_1|$, so $|H_1| \geq \delta^{pq} n_1^p n_2^q$.
+    \item By symmetry: $|H_2| \geq \delta^{pq} n_1^q n_2^p$.
+    \item Sum: $\hom(K_{p,q}, G) \geq \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p)$.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Discussion 4.1: Comparison to Sidorenko's Bound}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \textbf{Sidorenko's Conjecture (classical):}
+      \[
+        \hom(K_{p,q}, G) \geq (2\delta)^{pq}(n_1 + n_2)^{p+q-2} \cdots
+      \]
+
+      \textbf{Our entropy bound (Prop.\ 4.1):}
+      \[
+        \hom(K_{p,q}, G) \geq \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p)
+      \]
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Result}
+        \textbf{Ratio} $\dfrac{\text{Prop.\ 4.1}}{\text{Sidorenko}} \geq 2^{p-1}$ for $p = q$.\\[0.4em]
+        For $p > q$: improvement $\geq 2^{pq-(p+q)}$.\\[0.3em]
+        Grows \textbf{exponentially} in $|p - q|$.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.5em}
+  The entropy approach is provably superior to Sidorenko for $K_{p,q}$ homomorphism counting.
+\end{frame}
+
+\begin{frame}{Proposition 4.2: Refined Entropy Bound}
+  \begin{block}{Key idea}
+    Replace the uniform bound $H(U) \leq \log n_1$ with the \textit{actual} degree entropy.
+  \end{block}
+
+  \textbf{Define degree entropies:}
+  \[
+    x = H(U) = \sum_k \frac{d_k^{(U)}}{|E(G)|} \log \frac{|E(G)|}{d_k^{(U)}}, \qquad
+    y = H(V) = \sum_k \frac{d_k^{(V)}}{|E(G)|} \log \frac{|E(G)|}{d_k^{(V)}}
+  \]
+
+  \begin{theorem}[Proposition 4.2]
+    \begin{align*}
+      \hom(K_{p,q}, G) \geq\;
+        &\max\!\bigl\{(\delta n_1 n_2)^{pq} e^{-p(q-1)x - q(p-1)y},\;
+          (\delta n_1 n_2)^q e^{-(q-1)x},\;
+          (\delta n_1 n_2)^p e^{-(p-1)y}\bigr\}\\
+        +\;&\max\!\bigl\{(\delta n_1 n_2)^{pq} e^{-q(p-1)x - p(q-1)y},\;
+          (\delta n_1 n_2)^p e^{-(p-1)x},\;
+          (\delta n_1 n_2)^q e^{-(q-1)y}\bigr\}
+    \end{align*}
+  \end{theorem}
+\end{frame}
+
+\begin{frame}{Proposition 4.2: Proof Outline \& When It Helps}
+  \textbf{Proof outline:}
+  \begin{enumerate}
+    \item Use exact entropy: $H(U_1, V^q) = q\log(\delta n_1 n_2) - (q-1)H(U)$ without loosening $H(U)$.
+    \item Apply chain rule to $H(U^p, V^q)$ to derive multiple lower bounds.
+    \item Take max of all derived bounds per orientation; sum over both orientations.
+  \end{enumerate}
+
+  \textbf{When does the refinement help?}
+  \begin{itemize}
+    \item \textbf{Regular graphs:} $H(U) = \log n_1$, $H(V) = \log n_2$ --- reverts to Prop.\ 4.1.
+    \item \textbf{Star graph} (one hub of degree $n$):
+      \[
+        H(U) \ll \log n \implies \text{exponentially tighter bound}
+      \]
+    \item \textbf{Skewed degrees:} Non-uniform distribution $\Rightarrow$ $H$ significantly below $\log n$.
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Comparison \& Takeaways}
+% ============================================================
+
+\begin{frame}{Summary Comparison}
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lcccc}
+      \toprule
+      & \textbf{Prop.\ 3.1} & \textbf{Prop.\ 3.2} & \textbf{Prop.\ 4.1} & \textbf{Prop.\ 4.2} \\
+      \midrule
+      Tightness     & Exact          & Good        & Good           & Best \\
+      When exact    & Always         & $C_4$-free  & Extremes only  & Regular + special \\
+      Complexity    & $O(n^{k+\ell})$& $O(n)$      & $O(1)$         & $O(n)$ \\
+      Input needed  & Full structure & Degrees     & $\delta, n_1, n_2$ & Degree dist. \\
+      Beats Sidorenko & ---          & Varies      & $\geq 2^{p-1}\times$ & Even better \\
+      \bottomrule
+    \end{tabular}%
+  }
+\end{frame}
+
+\begin{frame}{Key Takeaways}
+  \begin{enumerate}
+    \item \textbf{Stirling numbers} quantify partition structure --- central to the exact formula.
+    \item \textbf{$C_4$-free condition} makes the combinatorial bound exact: absence of $K_{2,2}$ eliminates all higher biclique terms.
+    \item \textbf{Entropy framework} translates counting to probability, enabling systematic lower bounds from density alone.
+    \item \textbf{Degree entropy} in Prop.\ 4.2 captures non-regularity, giving exponentially tighter bounds for skewed graphs.
+    \item \textbf{Progressive improvement:}
+      \[
+        \underbrace{\text{Comb.\ (exact, expensive)}}_{\text{Prop.\ 3.1}}
+        \to \underbrace{\text{Comb.\ lower bound}}_{\text{Prop.\ 3.2}}
+        \to \underbrace{\text{Simple entropy}}_{\text{Prop.\ 4.1}}
+        \to \underbrace{\text{Refined entropy}}_{\text{Prop.\ 4.2}}
+      \]
+  \end{enumerate}
+\end{frame}
+
+\end{document}

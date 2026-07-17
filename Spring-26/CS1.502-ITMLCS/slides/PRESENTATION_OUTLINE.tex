@@ -1,0 +1,228 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf-8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{margin=1in}
+\title{Technical Presentation: Graph Homomorphism Bounds}
+\subtitle{Sections 3 \& 4 -- 20 Minutes}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction \& Context (2 min)}
+
+\textbf{Setting:} Bipartite source graph $K_{p,q} \to$ bipartite target graph $G$
+
+\begin{itemize}
+    \item \textbf{Goal:} Bound the number of valid homomorphisms $\text{hom}(K_{p,q}, G)$
+    \item \textbf{Challenge:} Direct enumeration is computationally expensive
+    \item \textbf{Approach:} Two complementary techniques
+    \begin{itemize}
+        \item Combinatorial bounds (Section 3)
+        \item Entropy-based bounds (Section 4)
+    \end{itemize}
+\end{itemize}
+
+\section{Section 3: Combinatorial Bounds (7 min)}
+
+\subsection{Proposition 3.1: Exact Formula}
+
+\textbf{Statement:}
+\[
+\text{hom}(K_{p,q}, G) = \sum_{k=1}^p \sum_{\ell=1}^q k!\ell! S(p,k)S(q,\ell)[N_{k,\ell}(G) + N_{\ell,k}(G)]
+\]
+
+\textbf{Intuition:}
+\begin{itemize}
+    \item Every homomorphism maps $K_{p,q}$ to a complete bipartite subgraph (bipartite clique) in $G$
+    \item The formula counts all ways to:
+    \begin{enumerate}
+        \item Partition $p$ vertices into $k$ groups (using Stirling numbers $S(p,k)$)
+        \item Partition $q$ vertices into $\ell$ groups
+        \item Match these to a bipartite clique of size $k \times \ell$ in $G$
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Key Insight:} Homomorphisms preserve bipartition structure
+\begin{itemize}
+    \item All vertices from one partition of $K_{p,q}$ map into the same partition of $G$
+    \item This forces the image to form a complete bipartite subgraph
+\end{itemize}
+
+\textbf{Computational Reality:} Even exact formulas are expensive---need $O(n^k)$ bipartite clique counts
+
+\subsection{Proposition 3.2: Combinatorial Lower Bound}
+
+\textbf{Statement:}
+\[
+\text{hom}(K_{p,q}, G) \geq \sum_{w \in V(G)} [d_G(w)^p + d_G(w)^q] - 2|E(G)|
+\]
+
+\textbf{Equality Condition:} Holds with equality iff $G$ is $C_4$-free (no 4-cycles)
+
+\textbf{Intuition:}
+\begin{itemize}
+    \item Focus only on ``star-like'' homomorphisms: map vertices to single edges
+    \item Ignore complex structures (complete bipartite subgraphs with $k,\ell \geq 2$)
+    \item The degree term captures stars: for each vertex $w$ of degree $d$, there are $d^p$ homomorphisms using $w$
+\end{itemize}
+
+\textbf{Why $C_4$-free matters:}
+\begin{itemize}
+    \item $K_{2,2}$ is a 4-cycle
+    \item Absence of $K_{2,2}$ means the ``discarded'' terms are zero
+    \item Lower bound becomes exact for trees, paths, etc.
+\end{itemize}
+
+\textbf{Proof Technique:}
+\begin{enumerate}
+    \item Start from Proposition 3.1
+    \item Drop all terms with $k,\ell \geq 2$ (they're non-negative)
+    \item Relate remaining sum to star graph homomorphisms via degree powers
+    \item Equality analysis shows $C_4$-freeness is necessary and sufficient
+\end{enumerate}
+
+\section{Section 4: Entropy-Based Bounds (9 min)}
+
+\subsection{Lemma 4.1 \& 4.2: Probabilistic Framework}
+
+\textbf{Setup:}
+\begin{itemize}
+    \item Sample random edges uniformly from $E(G)$
+    \item Get random vector $(U,V)$ where $U \in \{\text{left partition}\}$, $V \in \{\text{right partition}\}$
+    \item Construct $(U^p, V^q)$ by independent i.i.d.\ copies, with clever conditioning
+\end{itemize}
+
+\textbf{Lemma 4.1 Key Properties:}
+\begin{itemize}
+    \item $U_i \sim U$ (marginal distribution preserved)
+    \item $(U_i, V_j) \sim (U,V)$ (joint distribution recovered)
+    \item Allows entropy calculations on independent copies
+\end{itemize}
+
+\textbf{Lemma 4.2 Result:}
+\[
+H(U_1, V^q) \geq \log(\delta^q n_1 n_2^q)
+\]
+
+\textbf{Proof Idea:}
+\begin{itemize}
+    \item Joint entropy chains as: $H(U,V^q) = H(U) + qH(V|U)$
+    \item Each sample of $V$ given $U$ contributes $H(V|U) = H(U,V) - H(U) = \log(\delta n_1 n_2) - H(U)$
+    \item Bound $H(U) \leq \log n_1$ universally
+    \item Result: lower bound on entropy in terms of $\delta$ (edge density)
+\end{itemize}
+
+\subsection{Proposition 4.1: First Entropy-Based Bound}
+
+\textbf{Statement:}
+\[
+\text{hom}(K_{p,q}, G) \geq \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p) = \delta^{pq} \text{hom}(K_{p,q}, K_{n_1,n_2})
+\]
+
+\textbf{Intuition:}
+\begin{itemize}
+    \item A homomorphism corresponds to a realization $(u,v) \in U^p \times V^q$ of random vectors
+    \item Each edge mapping must hit an actual edge in $G$
+    \item Probability that all $pq$ edge mappings hit edges $\geq \delta^{pq}$
+    \item This probability directly bounds the counting problem
+\end{itemize}
+
+\textbf{Connection to Sidorenko's Conjecture:}
+\begin{itemize}
+    \item Sidorenko bound: $\delta^{pq}(n_1+n_2)^{p+q-2} (pq)^{pq}(n_1 n_2)^{pq}$
+    \item Our entropy bound improves Sidorenko by factors $\geq 2^{|p-q|}$ (Discussion 4.1)
+    \item Tighter because entropy exploits structure more efficiently
+\end{itemize}
+
+\textbf{Why It Works:}
+\begin{enumerate}
+    \item Valid homomorphisms form a measurable set
+    \item Upper bound entropy with uniform distribution bound
+    \item Correspondence is injective (one realization $\leftrightarrow$ one homomorphism)
+\end{enumerate}
+
+\subsection{Proposition 4.2: Refined Entropy Bound}
+
+\textbf{Statement:} (Degree-aware refinement)
+\[
+\text{hom}(K_{p,q}, G) \geq \max\{\ldots\} + \max\{\ldots\}
+\]
+
+where each max involves terms like:
+\[
+(\delta n_1 n_2)^{pq} \exp[-p(q-1)H(U) - q(p-1)H(V)]
+\]
+
+\textbf{Key Definitions:}
+\begin{itemize}
+    \item $H(U)$ = entropy of normalized degree profile in left partition
+    \item $H(V)$ = entropy of normalized degree profile in right partition
+    \item $\delta n_1 n_2 = |E(G)|$
+\end{itemize}
+
+\textbf{Intuition:}
+\begin{itemize}
+    \item \textbf{The refinement:} Use actual degree entropy instead of uniform upper bounds
+    \item Regular graphs (all vertices same degree) have $H=\log n$, recovering Prop 4.1
+    \item Non-regular graphs with concentrated degrees: entropy smaller $\to$ tighter bounds
+    \item Max over multiple terms captures two ``orientations'' of the homomorphism
+\end{itemize}
+
+\textbf{Why Two Maxes in Final Formula:}
+\begin{itemize}
+    \item First max: homomorphisms with $K_{p,q}$ partite sets $\to G$'s $(n_1,n_2)$ partite sets
+    \item Second max: homomorphisms with $K_{p,q}$ partite sets $\to G$'s $(n_2,n_1)$ partite sets
+    \item Two disjoint subsets partition all homomorphisms
+\end{itemize}
+
+\textbf{Proof Strategy:}
+\begin{enumerate}
+    \item Replace uniform entropy bounds with actual degree entropy calculations
+    \item Use $H(U,V^q) = q\log(\delta n_1 n_2) - (q-1)H(U)$ with degree-aware $H(U)$
+    \item Chain rules for $H(U^p,V^q)$ to get entropy bounds on both homomorphism sets
+    \item Convert entropy bounds to cardinality bounds via uniform distribution property
+    \item Take max over all derived lower bounds
+\end{enumerate}
+
+\section{Comparison \& Key Takeaways (2 min)}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Aspect} & \textbf{Prop 3.2} & \textbf{Prop 4.1} & \textbf{Prop 4.2} \\
+\hline
+\textbf{When exact} & C$_4$-free & Never & Regular + C$_4$-free \\
+\hline
+\textbf{Speed} & $O(n)$ & $O(1)$ & $O(n)$ \\
+\hline
+\textbf{Dependence} & Full structure & $\delta$ only & $\delta$ + degree profile \\
+\hline
+\textbf{Tightness} & Excellent on trees & Good on dense & Best overall \\
+\hline
+\end{tabular}
+
+\textbf{Key Insights:}
+\begin{enumerate}
+    \item \textbf{Combinatorial bounds} require knowing structure (bipartite cliques)
+    \item \textbf{Simple entropy bound} uses only density---universally applicable
+    \item \textbf{Refined entropy bound} incorporates degree distribution for tighter results
+    \item \textbf{Trade-off:} More information $\to$ tighter bounds, but higher computational cost
+\end{enumerate}
+
+\section{Notes for Delivery}
+
+\begin{itemize}
+    \item \textbf{Lemmas 4.1--4.2 are technical foundations}: Spend $\sim 1$ min on intuition, don't dwell on details
+    \item \textbf{Proposition 4.2 complexity}: Emphasize ``uses degree info'' rather than parsing all max terms
+    \item \textbf{Visual aid suggestion}: Show a $K_{3,3} \to$ random bipartite $G$ example, compute all three bounds
+    \item \textbf{Key punchline}: Entropy-based methods give provably better bounds than classical combinatorics for this problem
+\end{itemize}
+
+\end{document}

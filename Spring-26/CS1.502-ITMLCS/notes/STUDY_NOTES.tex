@@ -1,0 +1,416 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{parskip}
+
+\geometry{margin=1in}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\hom}{\operatorname{hom}}
+\newcommand{\Stir}[2]{S(#1,#2)}
+
+\title{\textbf{Study Notes: Sections 3 \& 4}\\[0.3em]
+  \large Graph Homomorphism Bounds:\\
+  Combinatorial and Entropy-Based Approaches}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Section 3: Exact Expressions and Combinatorial Lower Bounds}
+% ============================================================
+
+\subsection{Stirling Numbers of the Second Kind}
+
+\begin{definition}
+  $S(n,k)$ denotes the number of ways to partition $[n]$ into $k$ nonempty, pairwise disjoint subsets.
+\end{definition}
+
+\textbf{Base cases:}
+\begin{itemize}
+  \item $S(n,n) = 1$ \quad (each element in its own subset)
+  \item $S(n,1) = 1$ \quad (all elements in one subset)
+  \item $S(n,0) = 0$ for $n > 0$
+\end{itemize}
+
+\textbf{Recurrence:}
+\[
+  S(n,k) = k \cdot S(n-1,k) + S(n-1,k-1)
+\]
+
+\textit{Intuition:} When placing element $n$, either join one of $k$ existing subsets ($k \cdot S(n-1,k)$ ways) or form a new singleton subset ($S(n-1,k-1)$ ways).
+
+\textbf{Closed form:}
+\[
+  S(n,k) = \frac{1}{k!} \sum_{j=0}^{k} (-1)^{k-j} \binom{k}{j} j^n
+\]
+
+\textbf{Key role:} The number of surjections $[n] \to [k]$ equals $k! \cdot S(n,k)$.
+
+% ------------------------------------------------------------
+\subsection{Proposition 3.1: Exact Formula for Homomorphisms}
+% ------------------------------------------------------------
+
+\begin{proposition}[Exact formula]
+  Let $G$ be bipartite with partite sets $L$ and $R$, and $p,q \in \mathbb{N}$. Then:
+  \[
+    \hom(K_{p,q}, G) = \sum_{k=1}^{p} \sum_{\ell=1}^{q}
+    k!\,\ell!\; S(p,k)\,S(q,\ell)\bigl[N_{k,\ell}(G) + N_{\ell,k}(G)\bigr]
+  \]
+  where $N_{k,\ell}(G)$ is the number of labeled $K_{k,\ell}$ subgraphs of $G$ with partite sets in $L \times R$.
+\end{proposition}
+
+\textbf{Proof outline:}
+\begin{enumerate}
+  \item \textbf{Bipartition preservation.} Every homomorphism $\varphi: V(K_{p,q}) \to V(G)$ maps each
+    partite set of $K_{p,q}$ entirely into one partite set of $G$. \\
+    \textit{(If $u,w$ are in the same partition of $K_{p,q}$ but map to opposite sides of $G$, take any
+    common neighbor $v$; then $\varphi(u),\varphi(v)$ must be adjacent but $\varphi(w),\varphi(v)$ must
+    also be adjacent — yet $\varphi(u),\varphi(w)$ are in opposite parts and $K_{p,q}$ has no edge between
+    them, contradiction.)}
+
+  \item \textbf{Image is a complete bipartite subgraph.} The image of $\varphi$ forms a $K_{k,\ell}
+    \subseteq G$ for some $k \leq p$, $\ell \leq q$. \\
+    \textit{(Any two vertices from opposite partition images in $G$ must come from adjacent pre-images in
+    $K_{p,q}$, so they must be adjacent in $G$.)}
+
+  \item \textbf{Counting via surjections.} For a fixed $K_{k,\ell}$ in $G$, the number of ways to
+    surjectively map the $p$ left-vertices of $K_{p,q}$ onto the $k$ left-vertices of the clique is
+    $k! \cdot S(p,k)$; similarly $\ell! \cdot S(q,\ell)$ for the right side.
+
+  \item \textbf{Sum.} Summing over all $k \in [p]$, $\ell \in [q]$, and both orientations gives the
+    formula.
+\end{enumerate}
+
+\begin{remark}
+  If $G$ has girth $g$, then $N_{k,\ell}(G) = 0$ whenever $\min\{k,\ell\} \leq \lfloor g/2 \rfloor - 1$
+  and $\max\{k,\ell\} \leq \lfloor g/2 \rfloor$. This eliminates many terms, but computing the remaining
+  $N_{k,\ell}$ still costs $O(n^{k+\ell})$ per pair.
+\end{remark}
+
+% ------------------------------------------------------------
+\subsection{Proposition 3.2: Combinatorial Lower Bound}
+% ------------------------------------------------------------
+
+\begin{proposition}[Combinatorial lower bound]
+  Let $G$ be bipartite. Then:
+  \[
+    \hom(K_{p,q}, G) \geq \sum_{w \in V(G)} \bigl[d_G(w)^p + d_G(w)^q\bigr] - 2|E(G)|
+  \]
+  with equality if and only if $G$ is $C_4$-free (contains no $K_{2,2}$).
+\end{proposition}
+
+\textbf{Proof strategy:}
+\begin{enumerate}
+  \item \textbf{Drop higher terms.} All terms with $k, \ell \geq 2$ in Proposition~3.1 are non-negative,
+    so dropping them gives a lower bound:
+    \[
+      \hom(K_{p,q}, G) \geq
+      \sum_{k=1}^p k!\,S(p,k)\bigl[N_{k,1}(G)+N_{1,k}(G)\bigr]
+      + \sum_{\ell=1}^q \ell!\,S(q,\ell)\bigl[N_{1,\ell}(G)+N_{\ell,1}(G)\bigr]
+      - 2|E(G)|
+    \]
+
+  \item \textbf{Relate to star homomorphisms.} Define
+    $g(m) = \sum_{k=1}^m k!\,S(m,k)\bigl[N_{k,1}(G)+N_{1,k}(G)\bigr]$.
+    By Proposition~3.1 applied to $K_{1,m}$ and the classical identity $\hom(K_{1,m},G) = \sum_w d_G(w)^m$,
+    we get $g(m) = \sum_{w \in V(G)} d_G(w)^m$.
+
+  \item \textbf{Conclude:}
+    \[
+      \hom(K_{p,q}, G) \geq g(p) + g(q) - 2|E(G)|
+      = \sum_{w} \bigl[d_G(w)^p + d_G(w)^q\bigr] - 2|E(G)|
+    \]
+
+  \item \textbf{Equality.} Equality holds $\iff$ all dropped terms vanish $\iff$ $N_{2,2}(G) = 0$
+    (every larger clique contains $K_{2,2}$) $\iff$ $G$ is $C_4$-free.
+\end{enumerate}
+
+\textbf{Practical implications:}
+\begin{itemize}
+  \item \textbf{Trees:} Always $C_4$-free, so the formula is exact.
+  \item \textbf{Dense graphs:} For $G = K_{n/2,n/2}$ the exact count is $\sim 2^{1-2p}n^{2p}$ while
+    the bound gives $\sim 2^{1-p}n^{p+1}$, and the ratio $2^{-p}n^{p-1} \to \infty$.
+\end{itemize}
+
+\begin{corollary}[Trees]
+  $\displaystyle\hom(K_{p,q}, T) = \sum_{w \in V(T)} \bigl[d_T(w)^p + d_T(w)^q\bigr] - 2(|V(T)|-1)$
+\end{corollary}
+
+\begin{corollary}[General, $m$ edges]
+  $\displaystyle\hom(K_{p,q}, G) \geq 2^p n^{1-p}m^p + 2^q n^{1-q}m^q - 2m$,
+  with equality iff $G$ is $C_4$-free and regular.
+\end{corollary}
+
+% ============================================================
+\section{Section 4: Entropy-Based Lower Bounds}
+% ============================================================
+
+\subsection{Shannon Entropy Background}
+
+For a discrete random variable $X$ with support $[n]$:
+\[
+  H(X) = -\sum_{i=1}^n P(X=i)\log P(X=i)
+\]
+
+\textbf{Properties used throughout:}
+\begin{itemize}
+  \item $H(X) \leq \log n$ \quad (uniform distribution maximizes entropy)
+  \item $H(X,Y) = H(X) + H(Y \mid X)$ \quad (chain rule)
+  \item $H(X_1,\ldots,X_n) \leq \sum_i H(X_i)$ \quad (subadditivity)
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Lemma 4.1: Probabilistic Construction}
+% ------------------------------------------------------------
+
+\textbf{Setup.} Let $(U,V)$ be drawn uniformly from $E(G)$, with $U \in L$ and $V \in R$. Write $P_U$
+for the marginal of $U$ and $P_{V \mid U}$ for the conditional.
+
+\textbf{Construction of $(U^p, V^q)$.}
+\begin{enumerate}
+  \item[(a)] $V_1, \ldots, V_q$ are i.i.d.\ given $U$:
+    \[P_{V^q \mid U}(v \mid u) = \prod_{j=1}^q P_{V \mid U}(v_j \mid u)\]
+
+  \item[(b)] $U_1, \ldots, U_p$ are i.i.d.\ given $V^q$ via:
+    \[P_{U_i \mid V^q}(u \mid v)
+      = \frac{P_U(u)\prod_j P_{V \mid U}(v_j \mid u)}
+             {\sum_{u'} P_U(u')\prod_j P_{V \mid U}(v_j \mid u')}\]
+\end{enumerate}
+
+\begin{lemma}
+  Under this construction:
+  \begin{enumerate}
+    \item[(i)] $U_i \sim U$ for all $i \in [p]$.
+    \item[(ii)] $(U_i, V_j) \sim (U,V)$ for all $i \in [p]$, $j \in [q]$.
+  \end{enumerate}
+\end{lemma}
+
+\textbf{Proof sketch for (i).} Summing $P_{U_i \mid V^q}(u \mid v)P_{V^q}(v)$ over all $v$ cancels the
+denominator, yielding $P_U(u)$.
+
+\textbf{Consequence.} Since $(U_i, V_j) \sim (U,V)$, every realization $(u,v) \in U^p \times V^q$ defines
+a valid homomorphism $\varphi: V(K_{p,q}) \to V(G)$ by $i \mapsto u_i$ and $p+j \mapsto v_j$.
+
+% ------------------------------------------------------------
+\subsection{Lemma 4.2: Entropy Lower Bounds}
+% ------------------------------------------------------------
+
+\begin{lemma}
+  \[H(U_1, V^q) \geq \log(\delta^q n_1 n_2^q)\]
+  \[H(U^p, V^q) \geq \log(\delta^{pq} n_1^p n_2^q)\]
+\end{lemma}
+
+\textbf{Proof of the first inequality.}
+\begin{align*}
+  H(U_1, V^q)
+    &= H(U) + q\,H(V \mid U)                     &&\text{(chain rule + cond.\ independence)} \\
+    &= H(U) + q\bigl[\log(\delta n_1 n_2) - H(U)\bigr] &&\text{(since $H(U,V)=\log(\delta n_1 n_2)$)} \\
+    &= q\log(\delta n_1 n_2) - (q-1)\,H(U) \\
+    &\geq q\log(\delta n_1 n_2) - (q-1)\log n_1 &&\text{(since $H(U) \leq \log n_1$)} \\
+    &= \log(\delta^q n_1 n_2^q)
+\end{align*}
+
+\textbf{Second inequality.} By the parallel argument using $H(V^q) \leq q\log n_2$:
+\[
+  H(U^p, V^q) = H(V^q) + p\,H(U \mid V^q) \geq \log(\delta^{pq} n_1^p n_2^q)
+\]
+
+% ------------------------------------------------------------
+\subsection{Proposition 4.1: First Entropy-Based Bound}
+% ------------------------------------------------------------
+
+\begin{proposition}
+  Let $G$ be bipartite with $|L|=n_1$, $|R|=n_2$, and edge density $\delta$. For all $p,q \in \mathbb{N}$:
+  \[
+    \hom(K_{p,q}, G) \geq \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p)
+  \]
+\end{proposition}
+
+\textbf{Proof.}
+\begin{enumerate}
+  \item \textbf{Partition.} Let $H_1$ (resp.\ $H_2$) be the set of homomorphisms mapping the first
+    partite set of $K_{p,q}$ into $L$ (resp.\ $R$). Bipartition preservation gives $H_1 \sqcup H_2
+    = \operatorname{Hom}(K_{p,q},G)$.
+
+  \item \textbf{Count $H_1$.} Each realization $(u,v)$ of $(U^p, V^q)$ corresponds to a distinct element
+    of $H_1$. The uniform distribution over these realizations satisfies
+    $H(U^p,V^q) \leq \log|H_1|$.
+    By Lemma~4.2: $\log(\delta^{pq}n_1^p n_2^q) \leq H(U^p,V^q) \leq \log|H_1|$,
+    so $|H_1| \geq \delta^{pq}n_1^p n_2^q$.
+
+  \item \textbf{Count $H_2$ by symmetry.} Swapping the roles of $L$ and $R$ gives
+    $|H_2| \geq \delta^{pq}n_1^q n_2^p$.
+
+  \item \textbf{Sum.} $\hom(K_{p,q},G) = |H_1|+|H_2| \geq \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p)$. \qed
+\end{enumerate}
+
+\textbf{Equality cases:} $\delta = 0$ (edgeless graph, hom $= 0$) and $\delta = 1$ ($G = K_{n_1,n_2}$,
+bound is exact).
+
+% ------------------------------------------------------------
+\subsection{Discussion 4.1: Comparison to Sidorenko's Bound}
+% ------------------------------------------------------------
+
+Sidorenko's conjecture implies:
+\[
+  \hom(K_{p,q}, G) \geq (2\delta)^{pq}(n_1+n_2)^{p+q-2}(pq)^{pq}(n_1 n_2)^{pq}
+\]
+
+Our bound from Proposition~4.1:
+\[
+  \delta^{pq}(n_1^p n_2^q + n_1^q n_2^p)
+\]
+
+\textbf{Ratio analysis} (for $p = q$):
+\[
+  \frac{\text{Prop.\ 4.1}}{\text{Sidorenko}} \geq 2^{p-1} \gg 1
+\]
+
+For $p > q$: improvement $\geq 2^{pq-(p+q)}$, growing exponentially in $|p-q|$. The entropy approach is
+provably superior to Sidorenko for $K_{p,q}$ homomorphism counting.
+
+% ------------------------------------------------------------
+\subsection{Proposition 4.2: Refined Entropy Bound (Degree-Aware)}
+% ------------------------------------------------------------
+
+\textbf{Setup.} Define the degree entropy of each side using normalized degree profiles:
+\[
+  x = H(U) = \sum_{k=1}^{n_1} \frac{d_k^{(U)}}{|E(G)|} \log \frac{|E(G)|}{d_k^{(U)}}, \qquad
+  y = H(V) = \sum_{k=1}^{n_2} \frac{d_k^{(V)}}{|E(G)|} \log \frac{|E(G)|}{d_k^{(V)}}
+\]
+
+\begin{proposition}[Refined bound]
+  For all $p,q \in \mathbb{N}$:
+  \begin{align*}
+    \hom(K_{p,q}, G) \geq\;
+      &\max\Bigl\{
+          (\delta n_1 n_2)^{pq} e^{-p(q-1)x - q(p-1)y},\;
+          (\delta n_1 n_2)^{q} e^{-(q-1)x},\;
+          (\delta n_1 n_2)^{p} e^{-(p-1)y}
+        \Bigr\} \\
+      +\;&\max\Bigl\{
+          (\delta n_1 n_2)^{pq} e^{-q(p-1)x - p(q-1)y},\;
+          (\delta n_1 n_2)^{p} e^{-(p-1)x},\;
+          (\delta n_1 n_2)^{q} e^{-(q-1)y}
+        \Bigr\}
+  \end{align*}
+\end{proposition}
+
+\textbf{Proof outline.}
+\begin{enumerate}
+  \item \textbf{Use exact entropy.} Instead of bounding $H(U) \leq \log n_1$, keep the exact value:
+    \[H(U_1, V^q) = q\log(\delta n_1 n_2) - (q-1)\,H(U)\]
+    This is tighter when $H(U) < \log n_1$ (i.e., degrees are non-uniform).
+
+  \item \textbf{Multiple lower bounds via chain rule.} Apply the chain rule in different orders to
+    $H(U^p, V^q)$ to derive three lower bounds per orientation:
+    \begin{itemize}
+      \item Full formula using both $x$ and $y$.
+      \item Simplified using only $x$: $(\delta n_1 n_2)^q e^{-(q-1)x}$.
+      \item Simplified using only $y$: $(\delta n_1 n_2)^p e^{-(p-1)y}$.
+    \end{itemize}
+    Take the max (tightest lower bound).
+
+  \item \textbf{Symmetry for $H_2$.} Swap $p \leftrightarrow q$ and $x \leftrightarrow y$ to bound
+    the other orientation.
+
+  \item \textbf{Sum} both maxes over the two disjoint orientation classes.
+\end{enumerate}
+
+\textbf{When does the refinement help?}
+\begin{itemize}
+  \item \textbf{Regular graphs:} $H(U) = \log n_1$, $H(V) = \log n_2$ — reverts to Proposition~4.1.
+  \item \textbf{Star graph} (one hub of degree $n$): $H(U) \ll \log n$, giving an exponentially tighter
+    bound.
+  \item \textbf{Any skewed degree distribution:} $H \ll \log n$ yields a stronger bound.
+\end{itemize}
+
+% ============================================================
+\section{Technical Details: Full Proof of Lemma 4.1(ii)}
+% ============================================================
+
+\begin{lemma}
+  $(U_i, V^q) \sim (U, V^q)$ for all $i \in [p]$.
+\end{lemma}
+
+\begin{proof}
+  \begin{align*}
+    P_{U_i, V^q}(u,v)
+    &= P_{U_i \mid V^q}(u \mid v)\,P_{V^q}(v) \\
+    &= \frac{P_U(u)\prod_j P_{V \mid U}(v_j \mid u)}{\sum_{u'} P_U(u')\prod_j P_{V \mid U}(v_j \mid u')}
+       \cdot P_{V^q}(v)
+  \end{align*}
+
+  The denominator equals $P_{V^q}(v)$ (by the law of total probability), so:
+  \[
+    P_{U_i, V^q}(u,v) = P_U(u)\prod_j P_{V \mid U}(v_j \mid u) = P_{U, V^q}(u,v)
+  \]
+
+  Therefore $P_{U_i, V^q} = P_{U, V^q}$, and marginalizing over $V^q$ gives $U_i \sim U$.
+\end{proof}
+
+% ============================================================
+\section{Summary Comparison}
+% ============================================================
+
+\renewcommand{\arraystretch}{1.4}
+\begin{center}
+\begin{tabular}{lllll}
+  \toprule
+  & \textbf{Prop.\ 3.1} & \textbf{Prop.\ 3.2} & \textbf{Prop.\ 4.1} & \textbf{Prop.\ 4.2} \\
+  \midrule
+  Tightness         & Exact (by def.) & Good            & Good             & Best \\
+  When exact        & Always          & $C_4$-free only & Extremes only    & Regular + special \\
+  Complexity        & $O(n^{k+\ell})$ & $O(n)$          & $O(1)$           & $O(n)$ \\
+  Required input    & Full structure  & Degree sequence & $\delta,n_1,n_2$ & Degree distributions \\
+  Beats Sidorenko   & ---             & Varies          & $\geq 2^{p-1}\times$ & Even better \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{Key Takeaways}
+% ============================================================
+
+\begin{enumerate}
+  \item \textbf{Stirling numbers} quantify partition structure and are central to the exact formula.
+
+  \item \textbf{$C_4$-freeness} makes the combinatorial bound exact: no $K_{2,2}$ means every dropped
+    term in the sum vanishes.
+
+  \item \textbf{Entropy framework} converts a counting problem into a probability problem, enabling
+    universal lower bounds from density alone.
+
+  \item \textbf{Degree entropy} in Proposition~4.2 captures non-regularity; skewed degree distributions
+    yield exponentially tighter bounds.
+
+  \item \textbf{Progressive improvement:}
+    \[
+      \underbrace{\text{Prop.\ 3.1}}_{\text{exact, expensive}}
+      \;\longrightarrow\;
+      \underbrace{\text{Prop.\ 3.2}}_{\text{comb.\ LB}}
+      \;\longrightarrow\;
+      \underbrace{\text{Prop.\ 4.1}}_{\text{simple entropy}}
+      \;\longrightarrow\;
+      \underbrace{\text{Prop.\ 4.2}}_{\text{refined entropy}}
+    \]
+\end{enumerate}
+
+\end{document}
